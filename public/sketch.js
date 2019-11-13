@@ -47,8 +47,17 @@ function setup() {
   socket.on("mouseBroadcast", newDrawing);
 
   function newDrawing(receivedData) {
-
-  avatar;
+    push();
+    textSize(10);
+    var tempPos = myMap.latLngToPixel(receivedData.posizione.latitude, receivedData.posizione.longitude);
+    // requestAnimationFrame(newDrawing);
+    // image(receivedData.imag, tempPos.x, tempPos.y, 80, 60);
+    fill('yellow');
+    var avatName = text(receivedData.nome, tempPos.x, tempPos.y - 40);
+    print(receivedData.posizione.x);
+    print(receivedData.posizione.y);
+    print(receivedData.nome);
+    pop();
   }
 
   canvas = createCanvas(windowWidth, windowHeight);
@@ -73,7 +82,7 @@ function draw() {
 
   imageMode(CENTER);
   if (sensates == 1) {
-    clear();
+    //clear();
     //Riley is in Reijkiavik
     var rileyPos = myMap.latLngToPixel(64.1334735, -21.9224814);
     image(riley, rileyPos.x, rileyPos.y, 50, 50);
@@ -108,9 +117,13 @@ function draw() {
 
     var myPos = myMap.latLngToPixel(myLoc.latitude, myLoc.longitude);
     var avatar = image(capture, myPos.x, myPos.y, 80, 60);
+    textSize(10);
+    text(input.value(), myPos.x, myPos.y - 40);
 
     var sendData = {
-      image: avatar
+      //imag: capture,
+      nome: input.value(),
+      posizione: myLoc
     }
     socket.emit('camera', sendData);
   }
